@@ -1,0 +1,79 @@
+openapi: 3.0.1
+info:
+  title: "BrazilCeaf API"
+  description: "BrazilCeaf API"
+  version: "0.0.1"
+  contact:
+    email: ricardo@amisus.co.uk
+
+paths:
+  /get:
+    get:
+      tags:
+        - "get"
+      summary: "Get a search by term"
+      security:
+        - ApiKeyAuth: []
+      operationId: app.search
+      parameters:
+      - in: query
+        name: find
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: "Search term"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Result'
+
+        '404':
+          description: "Nothing is found"
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: BRAZILCEAF-APIKEY
+      x-apikeyInfoFunc: app.apikeyauth
+  schemas:
+    Result:
+      type: object
+      properties:
+        Name:
+          type: string
+        CPF:
+          type: string
+        MAT:
+          type: string
+        ORG:
+          type: string
+        State:
+          type: string
+        charge:
+          type: string
+        CFC:
+          type: string
+        NPP:
+          type: string
+        charge_date:
+          type: string
+          format: date
+        pages:
+          type: integer
+        sessions:
+          type: integer
+        Num_pro:
+          type: string
+        law:
+          type: string
+        date_dump:
+          type: string
+
+      required:
+        - Name

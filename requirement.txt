@@ -1,0 +1,5 @@
+connexion[swagger-ui]
+flask_env
+mysql-connector-python==8.0.12
+python-dateutil
+bs4

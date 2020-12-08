@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: brazilceafapi
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: brazilceafapi
+    spec:
+      containers:
+      - name: brazilceafapi
+        image: 996189696326.dkr.ecr.us-east-1.amazonaws.com/brazil-ceaf-api:1.0
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 50m
+        ports:
+        - containerPort: 80
+          name: brazil-port
+        env:

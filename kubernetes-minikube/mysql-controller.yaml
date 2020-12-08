@@ -1,0 +1,41 @@
+apiVersion: v1 # for versions before 1.9.0 use apps/v1beta2
+kind: ReplicationController
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: brazilceafapi
+        role: mysql
+    spec:
+      containers:
+        - image: mysql:5.6
+          name: mysql
+          env:
+            # Use secret in real usage
+            - name: MYSQL_ROOT_PASSWORD
+              value: fher692knxw2638wk
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+
+
+#if got problem while deploy a node of mysql and catch an error like "mysqld: Can't read dir of '/etc/mysql/conf.d/' (Errcode: 13 - Permission denied)"
+#it might be an apparmor issue if it only happens in privileged mode. This is because apparmor applies profiles
+#based on the binary paths. When we run the container in privileged mode docker only tells apparmor that we are not setting
+#the profile so leave this unconfined. However, by not specifying a profile, apparmor looks at the binary path and sees if it has any profiles matching the binary and automatically applies them.
+
+#problem can be solve by disable apparmor
+#sudo ln -s /etc/apparmor.d/usr.sbin.mysqld /etc/apparmor.d/disable/
+#sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
+
+#then minikube must be stopped then start to take affect from a changes
